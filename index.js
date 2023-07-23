@@ -27,6 +27,55 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
+    const admissionCollection = client.db('collegeBooking').collection('collegeName')
+
+
+    
+    // app.get('/admission-college', async (req, res) => {
+    //   const result = await addUserCollection.find().toArray()
+    //   res.send(result)
+    //   console.log(result);
+    // })
+
+    const docs = [
+      {
+        "name": "University of California, Berkeley",
+        "country": "USA"
+      },
+      {
+        "name": "University of Cambridge",
+        "country": "United Kingdom"
+      },
+      {
+        "name": "University of Tokyo",
+        "country": "Japan"
+      },
+      {
+        "name": "University of Sydney",
+        "country": "Australia"
+      },
+      {
+        "name": "University of Cape Town",
+        "country": "South Africa"
+      },
+      {
+        "name": "University of São Paulo",
+        "country": "Brazil"
+      }
+    ]
+
+
+    app.post("/collegeName", async (req, res) => {
+      const options = {ordered: true}
+      const result = await addClassCollection.insertMany(docs, options);
+      res.send(result);
+      console.log(result);
+    });
+
+    
+    
+
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
