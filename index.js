@@ -9,8 +9,7 @@ const port = process.env.port || 5000;
 app.use(cors());
 app.use(express.json());
 
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fgokub5.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fgokub5.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -27,54 +26,24 @@ async function run() {
     await client.connect();
     // Send a ping to confirm a successful connection
 
-    const admissionCollection = client.db('collegeBooking').collection('collegeName')
+    const admissionCollection = client
+      .db("collegeBooking")
+      .collection("collegeName");
+    const myCollegeCollection = client
+      .db("collegeBooking")
+      .collection("myCollege");
 
-
-    
-    // app.get('/admission-college', async (req, res) => {
-    //   const result = await addUserCollection.find().toArray()
-    //   res.send(result)
-    //   console.log(result);
-    // })
-
-    const docs = [
-      {
-        "name": "University of California, Berkeley",
-        "country": "USA"
-      },
-      {
-        "name": "University of Cambridge",
-        "country": "United Kingdom"
-      },
-      {
-        "name": "University of Tokyo",
-        "country": "Japan"
-      },
-      {
-        "name": "University of Sydney",
-        "country": "Australia"
-      },
-      {
-        "name": "University of Cape Town",
-        "country": "South Africa"
-      },
-      {
-        "name": "University of São Paulo",
-        "country": "Brazil"
-      }
-    ]
-
-
-    app.post("/collegeName", async (req, res) => {
-      const options = {ordered: true}
-      const result = await addClassCollection.insertMany(docs, options);
+    app.get("/collegeName", async (req, res) => {
+      const result = await admissionCollection.find().toArray();
       res.send(result);
-      console.log(result);
     });
 
-    
-    
+    app.post("/myCollege", async (req, res) => {
+      const addCollege = req.body;
+      const result = await myCollegeCollection.insertOne(addCollege);
 
+      res.send(result);
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
